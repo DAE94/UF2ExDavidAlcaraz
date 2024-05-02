@@ -2,6 +2,22 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const mysql = require('mysql2');
+const {Sequelize} = require("sequelize");
+
+
+const crearConfigBaseDades = () =>{
+  return new Sequelize("unidavidalcaraz", "root", "1234",{
+    host: "localhost",
+    dialect: "mysql",
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000,
+    }
+  });
+}
+const dbSeq = crearConfigBaseDades()
 const {initModels} = require(".//models/init-models");
 
 
@@ -53,3 +69,20 @@ app.get('/llistaAssigAlcaraz', (req, res) => {
   });
 })
 
+// -->A mi no em va pq no m'agafa el req.body, però crec que ha de ser així
+app.post('/modifDeptAlcaraz', async (req, res) => {
+  const {departament} = req.body
+  console.log("doctor", departament);
+  try {
+    await initModels(dbSeq).departament.update(departament,{where :{dept_codi: departament.dept_codi}});
+    res.json("dades actualitzades");
+
+  } catch (err){
+    console.log(err);
+    res.send("no puc, pelacanyes");
+  }
+});
+
+app.get('/impartirAssigAlcaraz',(req,res)=>{
+
+});

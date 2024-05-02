@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {RouterOutlet} from "@angular/router";
 import {HttpClient, HttpParams} from "@angular/common/http";
+import {Departament} from "../departament";
 
 @Component({
   selector: 'app-aplicacio',
@@ -28,5 +29,15 @@ constructor(private router: RouterOutlet, private http: HttpClient) {
     this.http.get('http://localhost:3020/llistaAssigAlcaraz').subscribe(data => {
       console.log(data);
     });
+  }
+  departament = new Departament(2, "fisicaQuantica","POLITECNICA 2", "972418288","2500");
+  exercici3(departament: Departament){
+    this.http.post<any>('http://localhost:3020/modifDeptAlcaraz', {departament}).subscribe((data)=>{
+      console.log(data);
+    })
+  }
+
+  exercici4(professor:string){
+    this.http.get('http://localhost:3020/impartirAssigAlcaraz').subscribe(data => {})
   }
 }
